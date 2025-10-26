@@ -1,0 +1,56 @@
+{
+  "name": "rtk-aframe-bridge",
+  "version": "0.1.0",
+  "description": "A bridge between Redux Toolkit and A-Frame for synchronized state management",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "vitest"
+  },
+  "keywords": [
+    "redux",
+    "redux-toolkit",
+    "aframe",
+    "bridge",
+    "state-management",
+    "react",
+    "vr",
+    "webxr"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-redux": ">=7.0.0",
+    "@reduxjs/toolkit": ">=1.0.0",
+    "aframe": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/aframe": "^1.2.8",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react": "^7.33.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.0.0",
+    "vite": "^4.4.0",
+    "vite-plugin-dts": "^3.6.0",
+    "vitest": "^0.34.0"
+  },
+  "dependencies": {
+    "aframe": "^1.7.1",
+    "aframe-react": "^4.4.0"
+  }
+}

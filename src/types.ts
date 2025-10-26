@@ -28,23 +28,24 @@ export type AframeComponentRegister = <
     ThisType<Component<T, System<S> & SE> & C>
 ) => void;
 
-type AframeStateMethods = {
+type AframeStateMethods<S extends object = object> = {
   subscribe: (component: AFrameComponent) => void;
-  onStateUpdate: (state: AFrameStateSchema) => void;
+  onStateUpdate: (state: S) => void;
 };
 // This type defines the signature for the function that registers A-Frame components that listen to state updates.
 export type AframeComponentWithStateRegister = <
   T extends object = object,
   C extends object = Partial<Component<T>>,
+  S extends object = object,
 >(
   name: string,
   component: Partial<
     Component<T, System<AFrameStateSchema> & AFrameStateSystem>
   > &
-    C & { onStateUpdate?: (state: AFrameStateSchema) => void } & ThisType<
+    C & { onStateUpdate?: (state: S) => void } & ThisType<
       Component<T, System<AFrameStateSchema> & AFrameStateSystem> &
         C &
-        AframeStateMethods
+        AframeStateMethods<S>
     >
 ) => void;
 

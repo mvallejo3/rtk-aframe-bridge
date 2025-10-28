@@ -10,6 +10,12 @@ A bridge between Redux Toolkit and A-Frame for synchronized state management. Th
 
 ## Why?
 
+I wanted to use A-Frame to display a product configuration in 3D. In my case, the React app that I wanted to add 3D capabilities to was already pretty matured- It already had a robust interface with options that allows users to configure a product.
+
+I just needed A-Frame to display said configuration in 3D and have some minor interactivity.
+
+The issue that I ran into is that my 3D scene kept reloaidn due to store updates in the react app.
+
 I ran into a problem while integrating A-Frame into an existing React Application: I wanted to build (and in some cases, update) the 3D scene based on my redux store, but manipulating 3D components in A-Frame from inside React comonents was very inefficient. You can use something like [aframe-react](https://www.npmjs.com/package/aframe-react), but they even have a whole section about how [React falls short](https://www.npmjs.com/package/aframe-react#making-react-viable) when it comes to performance on your 3D app.
 
 In my case, the React app that I wanted to add 3D capabilities to was already pretty matured. There was a lot of functionality built into user's configuring a product and the initial integration was to simply show a product configuration in 3D. More 3D features would come later.

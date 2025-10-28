@@ -80,7 +80,7 @@ export const registerAframeState: AframeStateRegister = <
   // if state is a function, extendDeep will skip it.
   // so we need to set the initial state manually.
   if (definition.initialState instanceof Function) {
-    State.initialState = definition.initialState();
+    State.initialState = definition.initialState;
   }
   /**
    * Registers an A-Frame system that manages the RTK bridge state.

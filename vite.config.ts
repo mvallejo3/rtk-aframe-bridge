@@ -29,6 +29,10 @@ export default defineConfig({
         },
       },
     },
+    watch: {
+      include: 'src/**',
+      exclude: 'node_modules/**',
+    },
   },
   resolve: {
     alias: {

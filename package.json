@@ -11,8 +11,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
+    "build:watch": "vite build --watch",
     "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "watch": "concurrently \"npm run type-check:watch\" \"npm run build:watch\"",
+    "preview": "vite preview",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "vitest"
   },
@@ -41,6 +44,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "concurrently": "^8.2.0",
     "eslint": "^8.45.0",
     "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",

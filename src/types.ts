@@ -1,6 +1,5 @@
-// import * as THREE from "three";
 import { Component, System } from "aframe";
-import { AFrameStateSchema, AFrameStateSystem } from ".";
+import { RTKBridgeSystem } from "./bridge";
 
 // Global declarations
 declare global {
@@ -8,6 +7,18 @@ declare global {
     clone<T extends object>(obj: T): T;
   }
 }
+
+export type AframeState<T extends object = object> = {
+  name: string;
+  initialState: T | (() => T);
+  handlers: Record<string, (state: T, action?: T) => void>;
+}
+
+
+export type AframeStateRegister = <T extends object = object>(
+  definition: AframeState<T>
+) => void;
+
 
 // This type is used to define A-Frame components with proper typing for the schema and methods.
 export type AFrameComponent<
@@ -35,35 +46,22 @@ type AframeStateMethods<S extends object = object> = {
 // This type defines the signature for the function that registers A-Frame components that listen to state updates.
 export type AframeComponentWithStateRegister = <
   T extends object = object,
-  C extends object = Partial<Component<T>>,
+  C extends object = object,
   S extends object = object,
 >(
   name: string,
-  component: Partial<
-    Component<T, System<AFrameStateSchema> & AFrameStateSystem>
-  > &
-    C & { onStateUpdate?: (state: S) => void } & ThisType<
-      Component<T, System<AFrameStateSchema> & AFrameStateSystem> &
-        C &
-        AframeStateMethods<S>
-    >
+  component: 
+    // AFrameComponent<T, C & AframeStateMethods<S>>
+    Partial<Component<T, RTKBridgeSystem<S>>> &
+    C & Partial<AframeStateMethods<S>> &
+    ThisType<Component<T, RTKBridgeSystem<S>> & C & AframeStateMethods<S>>
 ) => void;
 
 // This type defines the signature for the function that registers A-Frame systems.
 export type AframeSystemRegister = <
   T extends object = object,
-  C extends object = Partial<System<T>>,
+  C extends object = T & Partial<System<T>>,
 >(
   name: string,
-  system: Partial<System<T>> & C & ThisType<System<T> & C>
-) => void;
-
-export interface AframeState<T extends object = object> {
-  name: string;
-  initialState: T | (() => T);
-  handlers: Record<string, (state: T, action?: T) => void>;
-}
-
-export type AframeStateRegister = <T extends object = object>(
-  definition: Partial<AframeState<T>>
+  system: AFrameComponent<T, C>
 ) => void;

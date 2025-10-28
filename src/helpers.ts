@@ -1,11 +1,10 @@
-
 import "aframe";
 import {
   AframeSystemRegister,
   AframeComponentRegister,
   AframeComponentWithStateRegister,
 } from "./types";
-import { subscribe } from ".";
+import { subscribe } from "./bridge";
 
 /**
  * Registers an A-Frame component.
@@ -26,7 +25,8 @@ export const registerAframeComponent: AframeComponentRegister = (
  */
 export const registerAframeComponentWithState: AframeComponentWithStateRegister =
   (name, component) => {
-    registerAframeComponent(name, { ...component, subscribe });
+    component.subscribe = subscribe;
+    AFRAME.registerComponent(name, component);
   };
 
 /**

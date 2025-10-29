@@ -4,21 +4,27 @@ A bridge between Redux Toolkit and A-Frame for synchronized state management. Th
 
 ## Use this package if:
 
-- You want to integrate A-frame into an existing react app (that uses Redux Toolkit).
+- You want to integrate A-frame into an existing react app (that uses Redux).
 - You need to update the 3D scene based on changes to the react app store.
 - You want to avoid your 3D scene reloading multiple times due to store updates.
 
-## Why?
+## Installation
 
-I wanted to use A-Frame to display a product configuration in 3D. In my case, the React app that I wanted to add 3D capabilities to was already pretty matured- It already had a robust interface with options that allows users to configure a product.
+```bash
+# npm
+npm install rtk-aframe-bridge
+# or yarn
+yarn add rtk-aframe-bridge
+```
 
-I just needed A-Frame to display said configuration in 3D and have some minor interactivity.
+## Features
 
-The issue that I ran into is that my 3D scene kept reloaidn due to store updates in the react app.
-
-I ran into a problem while integrating A-Frame into an existing React Application: I wanted to build (and in some cases, update) the 3D scene based on my redux store, but manipulating 3D components in A-Frame from inside React comonents was very inefficient. You can use something like [aframe-react](https://www.npmjs.com/package/aframe-react), but they even have a whole section about how [React falls short](https://www.npmjs.com/package/aframe-react#making-react-viable) when it comes to performance on your 3D app.
-
-In my case, the React app that I wanted to add 3D capabilities to was already pretty matured. There was a lot of functionality built into user's configuring a product and the initial integration was to simply show a product configuration in 3D. More 3D features would come later.
+- 🔄 **Automatic State Synchronization**: Redux state changes automatically sync to A-Frame
+- 🎯 **Selective State Updates**: Use selectors to sync only the state you need
+- ⚡ **Real-time Updates**: A-Frame components react to state changes instantly
+- 🎮 **A-Frame Components**: Built-in component register helper for reactive state management
+- ⚠️ **Avoid Shortfalls**: By keeping any AFrame logic outside of the React runtime you get the best out of both worlds- React's state management, and AFrame's rendering speed.
+- 📦 **TypeScript Support**: Full TypeScript definitions included
 
 **Use cases**
 
@@ -31,30 +37,17 @@ In my case, the React app that I wanted to add 3D capabilities to was already pr
 - The A-Frame state cannot make changes to the Redux store.
 - Compatible with any Redux store, all docs and tests where created using Redux Toolkit.
 
-## Features
-
-- 🔄 **Automatic State Synchronization**: Redux state changes automatically sync to A-Frame
-- 🎯 **Selective State Updates**: Use selectors to sync only the state you need
-- ⚡ **Real-time Updates**: A-Frame components react to state changes instantly
-- 🎮 **A-Frame Components**: Built-in components for reactive state management
-- 🔗 **React Integration**: Hooks for accessing A-Frame state from React components
-- 📦 **TypeScript Support**: Full TypeScript definitions included
-
-## Installation
-
-```bash
-npm install rtk-aframe-bridge
-```
-
-```bash
-yarn add rtk-aframe-bridge
-```
-
 ## Quick Start
 
 ### 1. Setup Redux Bridge (middleware)
 
-The middleware will run everytime there is a change to the Redux store. Make sure to add your own logic to reduce the number of calls made to update the A-Frame state.
+Use `createRTKBridgeMiddleware(config)` to create a redux middleware. Config takes one property, `onUpdate`, which gets called everytime there is a change to the Redux store.
+
+`onUpdate` will receive 3 arguments: `prevState` the state before the change took place, `nextState` the state after the change takes place, and the `action` that triggered the change.
+
+In order to update the AFrame state, you `emit` an event on the scene. The event name will match a reducer in the AFrame state (see step 2).
+
+Make sure to include your own logic to reduce the number of events emitted on the scene.
 
 ```typescript
 import { Middleware } from "@reduxjs/toolkit";
@@ -66,8 +59,8 @@ const aframeStateMiddleware = createRTKBridgeMiddleware<RootState, AppDispatch>(
     // This runs on every store update
     onUpdate: (prevState, nextState, action) => {
       // Add some logic to check whether we should update the AFrame state
-
-      // fire a reducer on the AFrame state
+      if (!shouldEmit(prevState, nextState)) return;
+      // fire a reducer/handler on the AFrame state
       AFRAME.scenes[0]?.emit?.("updateStore", nextState);
     },
   }
@@ -76,7 +69,7 @@ const aframeStateMiddleware = createRTKBridgeMiddleware<RootState, AppDispatch>(
 export default aframeStateMiddleware;
 ```
 
-### 2. Create A-Frame State
+### 2. Register A-Frame State
 
 ```typescript
 import { registerAframeState } from "rtk-aframe-bridge";
@@ -197,3 +190,13 @@ Registers an A-Frame comopnent and types it to include the necessary methods to 
 ## License
 
 MIT
+
+## Backstory
+
+I wanted to use A-Frame to display a product configuration in 3D. In my case, the React app that I wanted to add 3D capabilities to already had an interface with a robust set of options for users to configure a product. I wanted to leverage this interface and the store that kept track of all the changes and simply update the 3D scene accordingly.
+
+My first attempt was to use the package [aframe-react](https://www.npmjs.com/package/aframe-react) to build my scene and a few Entities to display the 3D product config. This worked in the sense that I was able to make updates to my 3D scene in real time, but it got clunky and inefficient real quick.
+
+There were moments when the entire 3D scene would reload due to a change in the store. This was annoying becuase if you had moved in the scene or rotated the camera at all, the reload would cause the camera to reset and that was quite annoying.
+
+To be fair, aframe-react has a whole section about how [React falls short](https://www.npmjs.com/package/aframe-react#making-react-viable) when it comes to performance on your 3D app.

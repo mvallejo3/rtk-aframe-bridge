@@ -31,6 +31,10 @@
   ],
   "author": "Your Name",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mvallejo3/rtk-aframe-bridge.git"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-redux": ">=7.0.0",

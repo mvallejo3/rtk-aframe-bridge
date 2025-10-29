@@ -197,6 +197,6 @@ I wanted to use A-Frame to display a product configuration in 3D. In my case, th
 
 My first attempt was to use the package [aframe-react](https://www.npmjs.com/package/aframe-react) to build my scene and a few Entities to display the 3D product config. This worked in the sense that I was able to make updates to my 3D scene in real time, but it got clunky and inefficient real quick.
 
-There were moments when the entire 3D scene would reload due to a change in the store. This was annoying becuase if you had moved in the scene or rotated the camera at all, the reload would cause the camera to reset and that was quite annoying.
+There were moments when the entire 3D scene would reload due to a change in the store. This was annoying becuase if you had moved in the scene or rotated the camera at all, the reload would cause the camera to reset and that was not a great experience.
 
 To be fair, aframe-react has a whole section about how [React falls short](https://www.npmjs.com/package/aframe-react#making-react-viable) when it comes to performance on your 3D app.

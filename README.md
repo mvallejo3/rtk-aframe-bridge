@@ -69,6 +69,20 @@ const aframeStateMiddleware = createRTKBridgeMiddleware<RootState, AppDispatch>(
 export default aframeStateMiddleware;
 ```
 
+Then add the middleware to your redux store.
+
+```typescript
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./rootReducer";
+import aframeStateMiddleware from "lib/aframeStateMiddleware";
+
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(aframeStateMiddleware),
+});
+```
+
 ### 2. Register A-Frame State
 
 ```typescript
